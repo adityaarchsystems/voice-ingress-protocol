@@ -1,52 +1,46 @@
-# voice-ingress-protocol
+▲ ADITYA SHARMA // VOICE SYNTHESIS DATASET INGRESS // SPEC_v1.0.0
 
-`ADITYA SHARMA // VOICE SYNTHESIS DATASET INGRESS ENGINE`
-
----
-
-## Technical Overview
-
-The Voice Ingress Protocol manages the phoneme calibration and Hinglish/English dialect dataset distribution for advanced speech synthesis model training. It contains the structural layout for the 30-minute dual-language phoneme saturation training script, allowing operators to calibrate target variable fields (name, location, verb declensions) programmatically prior to voice capture.
+`[ ASSET CORE // v1.0.0 ]` `[ INGRESS MESH // ACTIVE ]` `[ CODE DE-TEMPLATIZED // TRUE ]`
 
 ---
 
-## Directory Matrix Graph
+## 📄 01 // DATASET ANALYSIS SUMMARY
 
-```text
-voice-ingress-protocol/
-├── config/
-│   ├── noise-isolation.json        # Pre-configured DB thresholds for hardware profiling
-│   └── prompt-voice-mapping.json   # JSON schemas for programmatic voice assignment
-├── core/
-│   ├── script-english.md           # Clean English training data payload
-│   └── script-hinglish.md          # Clean Hinglish dataset matrix
-├── index.html                      # De-templatized interactive frontend engine page
-└── README.md                       # High-fidelity project orchestration overview
-```
+The Voice Ingress Protocol serves as the programmatic gateway for phoneme calibration and dataset distribution within the Calyx speech synthesis framework. It defines the core schema for the 30-minute dual-language (English/Hinglish) phoneme saturation dataset, designed to isolate dialect-specific variables and optimize speech model training.
+
+Operators can configure localized prompt tokens dynamically via the frontend console, generating aligned audio-text pairs across key variables including:
+- **Target operator parameters** (`name`, `location`)
+- **Verb declension configurations** (masculine, feminine, neutral)
+- **Delivery network email destinations**
 
 ---
 
-## Local Initialization
+## 💻 02 // ENVIRONMENT MATRIX LOGS
 
-This deployment runs as a zero-dependency static engine. To inspect and execute the interactive frontend console locally, run one of the following commands in the project directory:
+Local execution is entirely static and zero-dependency. Launch the Ingress dashboard using either of the following server runtime parameters:
 
-### Option A: Python HTTP Server
+### Method A: Python HTTP Module
 ```bash
 python -m http.server 8000
 ```
 
-### Option B: Node static server
+### Method B: Node Serving Engine
 ```bash
 npx serve .
 ```
 
-Once running, navigate to `http://localhost:8000` or `http://localhost:3000` in your web browser.
+### Active Node Telemetry Capture
+```text
+[2026-06-04T19:30:12.441Z] [INIT] /voice/ingress/mesh -> SUCCESS: Hybrid routing engine active
+[2026-06-04T19:30:13.112Z] [EDGE] /calyx/calibration -> Ingesting localized phoneme arrays...
+[2026-06-04T19:30:14.002Z] [LIVE] /verify/follow     -> CONNECTED_USER: @developer_node // STATUS: APPROVED
+```
 
 ---
 
-## Open-Source Ecosystem Registry
+## 🌐 03 // INTEGRATED CORE ECOSYSTEM
 
-This repository is a core interface layer of the larger Calyx system architecture. Related modules include:
+This protocol is fully integrated with adjacent modules inside the Calyx orchestration suite:
 
-* **[Calyx Apex Engine](https://github.com/adityaarchsystems/calyx-apex)**: Automated system orchestration and performance instrumentation framework optimized for high-throughput edge nodes.
-* **[Calyx Snap Canvas](https://github.com/adityaarchsystems/calyx-snap-canvas)**: High-fidelity client rendering grid designed to generate interactive vector overlays dynamically with zero load-time footprint.
+* **[Calyx Apex Engine](https://github.com/adityaarchsystems/calyx-apex-engine)**: Automated system orchestration and performance instrumentation framework optimized for high-throughput edge nodes.
+* **[Calyx Snap Canvas](https://github.com/adityaarchsystems/project-snap)**: High-fidelity client rendering grid designed to generate interactive vector overlays dynamically with zero load-time footprint.
