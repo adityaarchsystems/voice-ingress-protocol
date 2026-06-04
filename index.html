@@ -459,31 +459,29 @@
     }
 
     /* Column 3: Social Vault Card */
-    .sys-hero-right {
-      background-color: var(--token-fluid-blush);
-      border-radius: var(--chassis-radius-deep);
-      border: 1.5px solid var(--ink-ground);
-      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .sys-portal-vault-card {
+      position: relative;
+      display: block;
       height: 100%;
+      min-height: 480px;
       box-sizing: border-box;
-      padding: calc(var(--sys-pacing-unit) * 6);
-      align-items: center;
-      text-align: center;
-      gap: 24px;
+      padding: calc(var(--sys-pacing-unit) * 6) calc(var(--sys-pacing-unit) * 6) 0 calc(var(--sys-pacing-unit) * 6);
+      background-color: #F1C2D3;
+      border-radius: var(--chassis-radius-sharp);
+      border: 1px solid var(--ink-ground);
+      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
       transition: transform 380ms cubic-bezier(0.19, 1, 0.22, 1), box-shadow 380ms cubic-bezier(0.19, 1, 0.22, 1);
+      text-align: center;
       width: 100%;
       order: 3;
     }
 
-    .sys-hero-right:hover {
+    .sys-portal-vault-card:hover {
       transform: translate3d(-4px, -4px, 0);
       box-shadow: 8px 8px 0px 0px var(--mesh-accent-alpha);
     }
 
-    .sys-vault-header-group {
+    .sys-vault-upper-content-wrapper {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1059,9 +1057,9 @@
       </main>
 
       <!-- Column 3: Social Vault Card (25% Width) -->
-      <aside class="sys-hero-right">
+      <aside class="sys-hero-right sys-portal-vault-card">
         
-        <div class="sys-vault-header-group">
+        <div class="sys-vault-upper-content-wrapper" style="margin-bottom: calc(var(--sys-pacing-unit) * 8);">
           <div id="vault-status-badge" class="sys-tag-status locked">
             [ SYSTEM_VOLUME // LOCKED ]
           </div>
@@ -1073,30 +1071,43 @@
           </p>
         </div>
 
-        <!-- Decrypted Ingress Access Monospace Panel -->
-        <div id="vault-crypto-zone" style="display: none; width: 100%; margin-top: auto;">
-          <div class="sys-crypto-keybox-brutalist">
-            <div class="sys-crypto-label-brutalist">DECRYPTED_INGRESS_ACCESS_KEY</div>
-            <div class="sys-crypto-input-wrapper">
-              <input type="text" id="crypto-value" class="sys-input-field-key" readonly>
-              <button type="button" id="trigger-copy-key" class="sys-btn-copy">
-                [ COPY ]
-              </button>
+        <!-- Absolute Baseline Dock Wrapper -->
+        <div class="sys-absolute-button-anchor-dock" style="
+            position: absolute;
+            bottom: calc(var(--sys-pacing-unit) * 6);
+            left: calc(var(--sys-pacing-unit) * 6);
+            right: calc(var(--sys-pacing-unit) * 6);
+            width: calc(100% - (calc(var(--sys-pacing-unit) * 12)));
+            z-index: 50;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        ">
+          <!-- Decrypted Ingress Access Monospace Panel -->
+          <div id="vault-crypto-zone" style="display: none; width: 100%;">
+            <div class="sys-crypto-keybox-brutalist">
+              <div class="sys-crypto-label-brutalist">DECRYPTED_INGRESS_ACCESS_KEY</div>
+              <div class="sys-crypto-input-wrapper">
+                <input type="text" id="crypto-value" class="sys-input-field-key" readonly>
+                <button type="button" id="trigger-copy-key" class="sys-btn-copy">
+                  [ COPY ]
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Auth Action trigger Strictly Nested inside Card -->
-        <button type="button" id="trigger-auth" class="sys-action-trigger" style="margin-top: auto;">
-          AUTHENTICATE VIA X GATEWAY
-        </button>
+          <!-- Auth Action trigger Strictly Nested inside Card -->
+          <button type="button" id="trigger-auth" class="sys-action-trigger" style="width: 100%;">
+            AUTHENTICATE VIA X GATEWAY
+          </button>
 
-        <!-- Decorative Diagnostic Telemetry Log Strip at absolute base of authorized view -->
-        <div id="vault-diagnostic-strip" style="display: none; width: 100%; margin-top: auto; text-align: left;">
-          <pre style="font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.5; text-transform: uppercase; line-height: 1.4; white-space: pre-wrap; margin: 0; border: none; background: transparent; padding: 0; color: var(--ink-ground);">--------------------------------------------------
+          <!-- Decorative Diagnostic Telemetry Log Strip at absolute base of authorized view -->
+          <div id="vault-diagnostic-strip" style="display: none; width: 100%; text-align: left;">
+            <pre style="font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.5; text-transform: uppercase; line-height: 1.4; white-space: pre-wrap; margin: 0; border: none; background: transparent; padding: 0; color: var(--ink-ground);">--------------------------------------------------
 [ INGRESS_GATE_SECURE // ARCHITECTURAL_ASSET_v1 ]
 [ AUTHORIZED_SESSION_TOKEN_HASH_VERIFIED_OK ]
 --------------------------------------------------</pre>
+          </div>
         </div>
 
       </aside>
