@@ -17,10 +17,10 @@ Operators can configure localized prompt tokens dynamically via the frontend con
 
 | CONFIGURATION PARAMETER | TARGET TARGET PROFILE VALUE | CORE INGRESS METRIC LIFECYCLE |
 | --- | --- | --- |
-| `TARGET_OPERATOR_NAME` | Programmatic Character String Variable | Native identity sanitization anchor |
-| `TARGET_OPERATOR_CITY` | Regional Environmental Metadata Token | Localized latency calibration anchor |
-| `VERB_DECLENSION_STATE` | Asymmetric Gender/Pronoun Vector Match | Code-switching linguistic routing map |
-| `DELIVERY_NETWORK_EMAIL` | Secure Payload Ingress Destination | Zero-cost simulated Razorpay webhook |
+| `OPERATOR NAME` | Programmatic Character String Variable | Native identity sanitization anchor |
+| `LOCATION METADATA` | Regional Environmental Metadata Token | Localized latency calibration anchor |
+| `LINGUISTIC CORE SETTING` | Asymmetric Gender/Pronoun Vector Match | Code-switching linguistic routing map |
+| `SECURE PORTAL EMAIL` | Secure Payload Ingress Destination | Zero-cost simulated Razorpay webhook |
 
 > [!IMPORTANT]
 > **SYSTEM OPERATION POLICY:** All raw voice datasets must have native identity indicators ("Damini", "Indore") programmatically isolated to prevent template code leaks.
