@@ -148,18 +148,18 @@
     }
 
     /* 3-Column Feature Coalition Grid */
-    .sys-portal-grid {
+    .sys-main-dashboard-grid {
       display: flex;
       flex-direction: column;
       gap: 32px;
     }
 
     @media (min-width: 1025px) {
-      .sys-portal-grid {
+      .sys-main-dashboard-grid {
         display: grid;
-        grid-template-columns: 1fr 2fr 1fr;
-        column-gap: 32px;
-        align-items: stretch;
+        grid-template-columns: 280px 1fr 320px; /* Column 1: Config, Column 2: Scripts, Column 3: Utility Info */
+        gap: 24px;
+        align-items: start; /* Sticky sidebars remain locked to their native content height */
       }
       
       .sys-control-dashboard {
@@ -940,7 +940,7 @@
     </header>
 
     <!-- Module 03: 3-Column Feature Coalition Grid -->
-    <div class="sys-portal-grid">
+    <div class="sys-main-dashboard-grid">
       
       <!-- Column 1: Config Dashboard Input Panel (25% Width) -->
       <aside class="sys-control-dashboard">
@@ -1059,55 +1059,24 @@
       <!-- Column 3: Social Vault Card (25% Width) -->
       <aside class="sys-hero-right sys-vault-portal-card-chassis">
         
-        <div class="sys-vault-text-node-cluster" style="margin-bottom: 32px;">
-          <div id="vault-status-badge" class="sys-tag-status locked">
-            [ SYSTEM_VOLUME // LOCKED ]
+        <div class="sys-vault-text-node-cluster">
+          <div class="sys-tag-status" style="background-color: #FFFFFF;">
+            [ DISTRIBUTION_MANIFEST // OPEN_ACCESS ]
           </div>
-          <h2 class="sys-title-vault">
-            Tier 2 secure payload download portal
+          <h2 class="sys-title-vault" style="color: var(--ink-ground); margin-top: 12px; margin-bottom: 8px;">
+            System Egress Directory
           </h2>
-          <p class="sys-vault-copy">
-            The secondary authentication layer locks access to the snap canvas engines. Validate your follow relationship with @adityasysarch via the gateway node authorization loop to unlock.
+          <p class="sys-vault-copy" style="color: var(--ink-ground); text-align: left;">
+            This data ingress network delivers unrestricted access to the 30-minute dual-language phoneme saturation training script model. Review deployment parameters and environment logs below to initialize local calibration paths.
           </p>
         </div>
 
-        <!-- Absolute Baseline Dock Wrapper -->
-        <div class="sys-absolute-button-baseline-dock" style="
-            position: absolute !important;
-            bottom: 24px !important; /* Hard-anchors the button exactly 24px above the bottom edge of the card */
-            left: 24px !important;
-            right: 24px !important;
-            width: calc(100% - 48px) !important; /* Substracts horizontal padding parameters to match container margins */
-            z-index: 99 !important;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        ">
-          <!-- Decrypted Ingress Access Monospace Panel -->
-          <div id="vault-crypto-zone" style="display: none; width: 100%;">
-            <div class="sys-crypto-keybox-brutalist">
-              <div class="sys-crypto-label-brutalist">DECRYPTED_INGRESS_ACCESS_KEY</div>
-              <div class="sys-crypto-input-wrapper">
-                <input type="text" id="crypto-value" class="sys-input-field-key" readonly>
-                <button type="button" id="trigger-copy-key" class="sys-btn-copy">
-                  [ COPY ]
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <!-- Auth Action trigger Strictly Nested inside Card -->
-          <button type="button" id="trigger-auth" class="sys-action-trigger" style="width: 100%;">
-            AUTHENTICATE VIA X GATEWAY
-          </button>
-
-          <!-- Decorative Diagnostic Telemetry Log Strip at absolute base of authorized view -->
-          <div id="vault-diagnostic-strip" style="display: none; width: 100%; text-align: left;">
-            <pre style="font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.5; text-transform: uppercase; line-height: 1.4; white-space: pre-wrap; margin: 0; border: none; background: transparent; padding: 0; color: var(--ink-ground);">--------------------------------------------------
-[ INGRESS_GATE_SECURE // ARCHITECTURAL_ASSET_v1 ]
-[ AUTHORIZED_SESSION_TOKEN_HASH_VERIFIED_OK ]
---------------------------------------------------</pre>
-          </div>
+        <!-- Base Diagnostic Telemetry Strip -->
+        <div style="width: 100%; margin-top: auto; text-align: left;">
+          <pre style="font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.85; text-transform: uppercase; line-height: 1.4; white-space: pre-wrap; margin: 0; border: none; background: transparent; padding: 0; color: var(--ink-ground);">--------------------------------------
+[ PAYLOAD_STATE: UNLOCKED_OK ]
+[ SOURCE: VOICE-INGRESS-PROTOCOL ]
+--------------------------------------</pre>
         </div>
 
       </aside>
@@ -1252,9 +1221,7 @@
       name: "",
       city: "",
       verbState: "neutral",
-      email: "",
-      vaultLocked: true,
-      authProcessing: false
+      email: ""
     };
 
     // Element bindings
@@ -1263,15 +1230,10 @@
     const elVerb = document.getElementById("input-target-verb");
     const elEmail = document.getElementById("input-target-email");
     const elTriggerCheckout = document.getElementById("trigger-checkout");
-    const elTriggerAuth = document.getElementById("trigger-auth");
-    const elTriggerCopyKey = document.getElementById("trigger-copy-key");
     const elScriptEnglish = document.getElementById("script-english");
     const elScriptHinglish = document.getElementById("script-hinglish");
     const elTerminalConsole = document.getElementById("terminal-console");
     const elTerminalClock = document.getElementById("terminal-clock");
-    const elVaultBadge = document.getElementById("vault-status-badge");
-    const elVaultZone = document.getElementById("vault-crypto-zone");
-    const elCryptoValue = document.getElementById("crypto-value");
 
     // Checkout Dialog Elements
     const elCheckoutOverlay = document.getElementById("checkout-overlay");
@@ -1405,29 +1367,6 @@
       showToast("Transaction cancelled.");
     });
 
-    // Authentication simulation & PKCE redirection interceptor
-    elTriggerAuth.addEventListener("click", () => {
-      if (state.authProcessing) return;
-      
-      if (!state.vaultLocked) {
-        showToast("Vault is already authorized.");
-        return;
-      }
-
-      state.authProcessing = true;
-      elTriggerAuth.disabled = true;
-      elTriggerAuth.textContent = "[ AUTHORIZING_SECURE_TOKEN... ]";
-      
-      addTerminalLog("Generating OAuth 2.0 PKCE code challenge and state keys.", "AUTH_GATE");
-
-      // Redirect client on the same page using simulated callback query code
-      setTimeout(() => {
-        const callbackUrl = window.location.origin + window.location.pathname + "?code=oauth_pkce_token_calyx_99a8";
-        addTerminalLog(`Redirecting callback loop to redirection URI: ${callbackUrl}`, "AUTH_GATE");
-        window.location.href = callbackUrl;
-      }, 1500);
-    });
-
     // Check query parameters during mounting sequence
     window.addEventListener("DOMContentLoaded", () => {
       // Clock synchronization
@@ -1444,84 +1383,6 @@
 
       // Run initial render for dynamic script arrays
       renderScripts();
-
-      // Check session storage for existing auth to make it robust
-      if (sessionStorage.getItem("calyx_vault_authorized") === "true") {
-        state.vaultLocked = false;
-        elVaultBadge.textContent = "[ SYSTEM_VOLUME // AUTHORIZED ]";
-        elVaultBadge.className = "sys-tag-status authorized";
-        elVaultZone.style.display = "block";
-        const base64DownloadKey = "aHR0cHM6Ly9naXRodWIuY29tL2FkaXR5YWFyY2hzeXN0ZW1zL3ZvaWNlLXNjcmlwdC1jb3Jl";
-        elCryptoValue.value = base64DownloadKey;
-        elTriggerAuth.style.display = "none";
-        document.getElementById("vault-diagnostic-strip").style.display = "block";
-        addTerminalLog("CONNECTED_USER: @developer_node // FOLLOW STATUS: VERIFIED // ACCESS KEY RELEASED", "API_SEC");
-        return;
-      }
-
-      // Intercept code query parameter
-      const urlParams = new URLSearchParams(window.location.search);
-      const authCode = urlParams.get("code");
-
-      if (authCode) {
-        // Clean URL parameter to prevent reload loop
-        const urlWithoutCode = window.location.protocol + "//" + window.location.host + window.location.pathname;
-        window.history.replaceState({}, document.title, urlWithoutCode);
-
-        addTerminalLog(`Intercepted callback redirection authorization code: [${authCode}]`, "AUTH_GATE");
-        
-        // Disable auth trigger and show loading
-        elTriggerAuth.disabled = true;
-        elTriggerAuth.textContent = "[ AUTHORIZING_SECURE_TOKEN... ]";
-        
-        addTerminalLog(`Pushing verification payload to gateway node: ${window.CalyxConfig.verificationEndpoint}`, "AUTH_GATE");
-        
-        // Simulating the serverless verification logic handshake
-        setTimeout(() => {
-          addTerminalLog("X API response state 200 OK. Resolving verification follow status for target: @adityasysarch", "API_SEC");
-          
-          setTimeout(() => {
-            state.vaultLocked = false;
-            state.authProcessing = false;
-            sessionStorage.setItem("calyx_vault_authorized", "true");
-            
-            // Clean interface transitions
-            elVaultBadge.textContent = "[ SYSTEM_VOLUME // AUTHORIZED ]";
-            elVaultBadge.className = "sys-tag-status authorized";
-            
-            elVaultZone.style.display = "block";
-            
-            // Base64 cryptographic download key injection
-            const base64DownloadKey = "aHR0cHM6Ly9naXRodWIuY29tL2FkaXR5YWFyY2hzeXN0ZW1zL3ZvaWNlLXNjcmlwdC1jb3Jl";
-            elCryptoValue.value = base64DownloadKey;
-            
-            elTriggerAuth.style.display = "none";
-            document.getElementById("vault-diagnostic-strip").style.display = "block";
-            
-            // Identity update string log output
-            addTerminalLog("CONNECTED_USER: @developer_node // FOLLOW STATUS: VERIFIED // ACCESS KEY RELEASED", "API_SEC");
-            showToast("System Vault Authorized. Cryptographic key decrypted.");
-          }, 1000);
-
-        }, 1200);
-      }
-    });
-
-    // Copy to clipboard mechanism
-    elTriggerCopyKey.addEventListener("click", () => {
-      const keyVal = elCryptoValue.value;
-      navigator.clipboard.writeText(keyVal).then(() => {
-        showToast("Success: Access token saved to clipboard.");
-        addTerminalLog("Cryptographic token key successfully exported to client system clipboard.", "SYSTEM");
-        
-        // Feedback state [ COPIED ]
-        elTriggerCopyKey.textContent = "[ COPIED ]";
-        setTimeout(() => {
-          elTriggerCopyKey.textContent = "[ COPY ]";
-        }, 2000);
-      }).catch(err => {
-        showToast("Error: Clipboard write execution failed.");
-      });
     });
 
     // Live monitor loop simulating subagent logs
