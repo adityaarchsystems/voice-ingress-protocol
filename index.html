@@ -39,6 +39,9 @@
       
       /* Layout & Chassis Metrics */
       --sys-pacing-unit: 8px;
+      --sys-space-sm: 8px;
+      --sys-space-md: 16px;
+      --accent-blue-token: #5341cd;
       --chassis-radius-sharp: 2px;
       --chassis-radius-deep: 12px;
       --spacing-container-max: 1280px;
@@ -270,43 +273,115 @@
       order: 2;
     }
 
-    .sys-script-slate {
+    .sys-script-card-split {
       background-color: #FFFFFF;
       border: 1.5px solid var(--ink-ground);
       border-radius: var(--chassis-radius-deep);
+      display: flex;
+      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
+      overflow: hidden;
+      width: 100%;
+      max-height: 520px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    .sys-left-metadata-strip {
+      width: 20%;
+      background-color: var(--canvas-core);
+      border-right: 1.5px solid var(--ink-ground);
+      padding: 24px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ink-ground);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      text-transform: uppercase;
+      word-break: break-word;
+    }
+
+    .sys-primary-document-canvas {
+      width: 80%;
+      background-color: #FFFFFF;
       padding: 24px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
+      gap: 20px;
+      text-align: left;
     }
 
-    .sys-script-title {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
+    .sys-canvas-heading {
+      font-family: 'Hanken Grotesk', sans-serif;
       font-weight: 700;
-      border-bottom: 1px solid rgba(34, 34, 34, 0.1);
-      padding-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      font-size: 22px;
+      color: var(--mesh-accent-alpha);
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+      margin: 0;
+    }
+
+    .sys-canvas-callout-banner {
+      background-color: #E9B872; /* Warm golden amber */
+      border-radius: 0.5rem; /* 8px */
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif;
+      font-weight: 500;
+      font-size: 13.5px;
+      color: var(--ink-ground);
+      line-height: 1.4;
+      border: 1px solid var(--ink-ground);
     }
 
     .sys-script-text {
-      white-space: pre-wrap;
       font-family: 'Inter', sans-serif;
       font-size: 15px;
       color: var(--ink-ground);
       line-height: 1.6;
+      white-space: pre-wrap;
     }
 
-    .sys-script-text strong {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 13px;
+    .sys-token-highlight {
+      border-bottom: 2px solid var(--accent-blue-token);
+      padding-bottom: 2px;
+      font-weight: 700;
       color: var(--mesh-accent-alpha);
-      background-color: rgba(83, 65, 205, 0.08);
-      padding: 2px 6px;
+      display: inline-block;
+      line-height: 1.1;
+    }
+
+    .sys-canvas-delivery-note {
+      background-color: #F4C2D7; /* Soft pastel pink */
       border-radius: var(--chassis-radius-sharp);
+      padding: 12px 16px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      color: var(--ink-ground);
+      line-height: 1.5;
+      border: 1px solid var(--ink-ground);
+      text-align: left;
+    }
+
+    .sys-canvas-baseline-footer {
+      border-top: 1px solid rgba(34, 34, 34, 0.12);
+      padding-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: rgba(34, 34, 34, 0.6);
+      text-transform: uppercase;
+    }
+
+    .sys-footer-right-badge {
+      border: 1px solid #000000;
+      padding: 4px 8px;
+      font-weight: 700;
+      color: #000000;
+      background-color: transparent;
+      display: inline-block;
     }
 
     /* Column 2 Action Chassis */
@@ -816,6 +891,26 @@
       gap: 12px;
     }
 
+    @media (max-width: 1024px) {
+      .sys-script-card-split {
+        display: flex;
+        flex-direction: column;
+        gap: var(--sys-space-md);
+      }
+      .sys-left-metadata-strip {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid rgba(34, 34, 34, 0.12);
+        padding-bottom: var(--sys-space-sm);
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+      .sys-primary-document-canvas {
+        width: 100%;
+      }
+    }
+
     @media (min-width: 480px) {
       .sys-checkout-actions {
         grid-template-columns: 1fr 1fr;
@@ -890,21 +985,67 @@
       <main class="sys-column-middle">
         
         <!-- English Slate -->
-        <div class="sys-script-slate">
-          <div class="sys-script-title">
-            <span>INGRESS_NODE_01 // SYSTEM_CALIBRATION_ENGLISH</span>
-            <span class="sys-tag-caps status-mint">TIMESTAMP: 00:00 - 03:00</span>
-          </div>
-          <div id="script-english" class="sys-script-text"></div>
+        <div class="sys-script-card-split">
+          <!-- Left Metadata Column Strip -->
+          <aside class="sys-left-metadata-strip">
+            <div>PROTOCOL: TCG-HUDDLE-SCRIPT</div>
+            <div>PART: 01 // ENGLISH</div>
+            <div>SECTION_01</div>
+            <div>TIMESTAMP: 00:00 - 03:00</div>
+            <div>METRIC: AUTHENTIC_VOICE</div>
+          </aside>
+          
+          <!-- Primary Document Canvas Board -->
+          <main class="sys-primary-document-canvas">
+            <h3 class="sys-canvas-heading">Hello & Who I Am</h3>
+            
+            <div class="sys-canvas-callout-banner">
+              [Warm, natural – like talking to a friend you just met]
+            </div>
+            
+            <div id="script-english" class="sys-script-text"></div>
+            
+            <div class="sys-canvas-delivery-note">
+              DELIVERY NOTE: Say your name warmly and clearly. Pause after 'thinks a lot, talks a lot, cares a lot' – let it breathe with a slight smile.
+            </div>
+            
+            <div class="sys-canvas-baseline-footer">
+              <span class="sys-footer-left">[ CLONE_TRAINING_PROTOCOL // SPEC_V1.0.0 ]</span>
+              <span class="sys-footer-right-badge">BUILT BY ADITYA SHARMA</span>
+            </div>
+          </main>
         </div>
 
         <!-- Hinglish Slate -->
-        <div class="sys-script-slate">
-          <div class="sys-script-title">
-            <span>INGRESS_NODE_02 // SYSTEM_CALIBRATION_HINGLISH</span>
-            <span class="sys-tag-caps status-blush">TIMESTAMP: 03:00 - 06:00</span>
-          </div>
-          <div id="script-hinglish" class="sys-script-text"></div>
+        <div class="sys-script-card-split">
+          <!-- Left Metadata Column Strip -->
+          <aside class="sys-left-metadata-strip">
+            <div>PROTOCOL: TCG-HUDDLE-SCRIPT</div>
+            <div>PART: 02 // HINGLISH</div>
+            <div>SECTION_01</div>
+            <div>TIMESTAMP: 00:00 - 03:00</div>
+            <div>METRIC: AUTHENTIC_VOICE</div>
+          </aside>
+          
+          <!-- Primary Document Canvas Board -->
+          <main class="sys-primary-document-canvas">
+            <h3 class="sys-canvas-heading">Namaste & Main Kaun Hoon</h3>
+            
+            <div class="sys-canvas-callout-banner">
+              [Dil se, friendly – jaise kisi nayi dost se pehli baar mil rahe ho]
+            </div>
+            
+            <div id="script-hinglish" class="sys-script-text"></div>
+            
+            <div class="sys-canvas-delivery-note">
+              DELIVERY NOTE: Apna naam clearly aur warmly bolo. 'Sochti hai, bolti hai, care karti hai' ke baad pause lo – thodi si smile ke saath.
+            </div>
+            
+            <div class="sys-canvas-baseline-footer">
+              <span class="sys-footer-left">[ CLONE_TRAINING_PROTOCOL // SPEC_V1.0.0 ]</span>
+              <span class="sys-footer-right-badge">BUILT BY ADITYA SHARMA</span>
+            </div>
+          </main>
         </div>
 
         <!-- Download Action Chassis -->
@@ -1085,17 +1226,21 @@
       {
         id: "sc_english",
         lines: [
-          "Initiating voice profile validation sequence for node {name}.",
-          "Confirming network access configurations from location {city}. Ensure local latency parameters remain below twelve milliseconds.",
-          "The system logs indicate active status. I am currently verifying the security certificate parameters."
+          "Hey! So glad you're here. My name is {name} — and I'm simply a person who thinks a lot, talks a lot, and cares a lot.",
+          "I'm based in {city}, and I genuinely love this city. People here are real, the food is incredible, and there's a quiet hustle that I deeply respect.",
+          "My biggest quality — and sometimes my biggest problem — is that I cannot let go of something until I fully understand it. The 'why' has to make sense before I move forward.",
+          "I have a very low tolerance for things that feel fake or performative. I love depth over surface. Genuine over polished. Real over impressive.",
+          "So if you're talking to me — or my clone — expect honesty. Expect directness. And expect genuine curiosity about you too."
         ]
       },
       {
         id: "sc_hinglish",
         lines: [
-          "Mera naam {name} hai, aur main abhi {city} se system operations setup {verb_karta}.",
-          "Is test line ka purpose voice model validation matrix ko calibrate karna hai.",
-          "Agar validation complete ho jata hai, toh main secondary vault access code update kar {verb_doong}."
+          "Hey! Aao, baat karte hain. Mera naam {name} hai — aur main ek aisi insaan hoon jo bahut {verb_sochti} hai, bahut {verb_bolti} hai, aur bahut care {verb_karti} hai.",
+          "Main {city} se hoon — aur yeh city mujhe genuinely pasand hai. Yahan ke log real hain, khana toh zabardast hai, aur ek quiet hustle hai jo tumhe grounded rakhti hai.",
+          "Meri sabse badi quality — aur kabhi kabhi sabse badi problem — yeh hai ki main kisi bhi cheez ko tab tak nahi chhod {verb_sakti} jab tak use poori tarah samajh na loon.",
+          "Jo cheez fake ya performative lagti hai — usse mujhe literally allergy hai. Depth chahiye mujhe, surface nahi. Real chahiye, impressive nahi.",
+          "Toh agar tum mujhse baat kar rahe ho — expect karo: seedhi baat, honest raay, aur genuine curiosity tumhare baare mein bhi."
         ]
       }
     ];
@@ -1136,19 +1281,25 @@
 
     // Dynamic Copy replacement helpers
     function renderScripts() {
-      const nameReplacement = state.name ? `<strong>${state.name}</strong>` : "<u>[YOUR_NAME]</u>";
-      const cityReplacement = state.city ? `<strong>${state.city}</strong>` : "<u>[YOUR_CITY]</u>";
+      const nameReplacement = `<span class="sys-token-highlight">${state.name || "Damini"}</span>`;
+      const cityReplacement = `<span class="sys-token-highlight">${state.city || "Indore"}</span>`;
       
-      let verbKartaText = "<u>[karta hoon / karti hoon]</u>";
-      let verbDoongText = "<u>[doonga / doongi]</u>";
+      let sochtiVal = "sochti";
+      let boltiVal = "bolti";
+      let kartiVal = "karti";
+      let saktiVal = "sakti";
 
       if (state.verbState === "masculine") {
-        verbKartaText = "<strong>karta hoon</strong>";
-        verbDoongText = "<strong>doonga</strong>";
-      } else if (state.verbState === "feminine") {
-        verbKartaText = "<strong>karti hoon</strong>";
-        verbDoongText = "<strong>doongi</strong>";
+        sochtiVal = "sochta";
+        boltiVal = "bolta";
+        kartiVal = "karta";
+        saktiVal = "sakta";
       }
+
+      const sochtiReplacement = `<span class="sys-token-highlight">${sochtiVal}</span>`;
+      const boltiReplacement = `<span class="sys-token-highlight">${boltiVal}</span>`;
+      const kartiReplacement = `<span class="sys-token-highlight">${kartiVal}</span>`;
+      const saktiReplacement = `<span class="sys-token-highlight">${saktiVal}</span>`;
 
       // Render English
       const engTemplate = voiceScriptsRegistry.find(s => s.id === "sc_english");
@@ -1162,8 +1313,10 @@
       const hinLinesHtml = hinTemplate.lines.map(line => {
         return line.replace(/{name}/g, nameReplacement)
                    .replace(/{city}/g, cityReplacement)
-                   .replace(/{verb_karta}/g, verbKartaText)
-                   .replace(/{verb_doong}/g, verbDoongText);
+                   .replace(/{verb_sochti}/g, sochtiReplacement)
+                   .replace(/{verb_bolti}/g, boltiReplacement)
+                   .replace(/{verb_karti}/g, kartiReplacement)
+                   .replace(/{verb_sakti}/g, saktiReplacement);
       }).join("\n\n");
       elScriptHinglish.innerHTML = hinLinesHtml;
     }
