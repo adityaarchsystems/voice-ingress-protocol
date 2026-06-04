@@ -1,0 +1,1394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calyx Systems // Voice Script Ingress Engine</title>
+  
+  <meta name="description" content="Calyx Systems Voice Script Ingress Engine handles phoneme calibration and Hinglish dialect dataset distribution for speech synthesis training.">
+  
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://github.com/adityaarchsystems">
+  <meta property="og:title" content="Calyx Systems // Voice Script Ingress Engine">
+  <meta property="og:description" content="Calyx Systems Voice Script Ingress Engine handles phoneme calibration and Hinglish dialect dataset distribution for speech synthesis training.">
+  
+  <!-- Font Imports -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@700&family=Inter:wght@400;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* Reset & Core Design Token Specifications */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Obfuscated Namespace Variables */
+      --canvas-core: #E8E8E3;
+      --ink-ground: #222222;
+      --mesh-accent-alpha: #5341cd;
+      
+      /* Surface Named Palette Fills */
+      --token-fluid-mint: #C5E4D2;
+      --token-fluid-blush: #F1C2D3;
+      --token-fluid-sand: #E4B976;
+      
+      /* Layout & Chassis Metrics */
+      --sys-pacing-unit: 8px;
+      --chassis-radius-sharp: 2px;
+      --chassis-radius-deep: 12px;
+      --spacing-container-max: 1280px;
+      
+      /* Framing Layout Paths: 1px in #222222 at 12% opacity */
+      --sys-border-path: 1px solid rgba(34, 34, 34, 0.12);
+    }
+
+    body {
+      background-color: var(--canvas-core);
+      color: var(--ink-ground);
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      overflow-x: hidden;
+      padding: 0 24px;
+    }
+
+    /* Zero-Template Structural Layout Components */
+    .sys-portal-chassis {
+      max-width: var(--spacing-container-max);
+      width: 100%;
+      margin: 0 auto;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Sticky Navigation Bar */
+    .sys-navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background-color: var(--canvas-core);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: calc(var(--sys-pacing-unit) * 3) calc(var(--sys-pacing-unit) * 4);
+      border-bottom: var(--sys-border-path);
+      width: 100%;
+    }
+
+    .sys-nav-left {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .sys-nav-right {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    .sys-nav-link {
+      color: var(--ink-ground);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 200ms ease;
+    }
+
+    .sys-nav-link:hover {
+      border-bottom-color: var(--ink-ground);
+    }
+
+    /* Typographical Hero Section */
+    .sys-hero-text-block {
+      padding: 64px 0 48px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 960px;
+    }
+
+    .sys-hero-eyebrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--mesh-accent-alpha);
+      letter-spacing: 0.05em;
+    }
+
+    .sys-title-hero {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.5rem, 5vw + 1rem, 5.5rem);
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+      color: var(--ink-ground);
+    }
+
+    .sys-body-copy {
+      font-size: 17px;
+      font-weight: 400;
+      color: rgba(34, 34, 34, 0.85);
+      line-height: 1.6;
+    }
+
+    /* 3-Column Feature Coalition Grid */
+    .sys-portal-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    @media (min-width: 1025px) {
+      .sys-portal-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr 1fr;
+        column-gap: 32px;
+        align-items: stretch;
+      }
+      
+      .sys-control-dashboard {
+        grid-column: 1;
+        grid-row: 1;
+        align-self: flex-start;
+      }
+      
+      .sys-column-middle {
+        grid-column: 2;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 740px;
+      }
+      
+      .sys-hero-right {
+        grid-column: 3;
+        grid-row: 1;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        min-height: 740px;
+      }
+    }
+
+    /* Column 1: Config Dashboard Input Panel */
+    .sys-control-dashboard {
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--ink-ground);
+      border-radius: var(--chassis-radius-deep);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
+      order: 1;
+    }
+
+    .sys-dashboard-title-bar {
+      border-bottom: var(--sys-border-path);
+      padding-bottom: 8px;
+      margin-bottom: 4px;
+    }
+
+    .sys-field-container {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sys-field-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(34, 34, 34, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sys-input-field {
+      border: none;
+      border-bottom: 1px solid var(--ink-ground);
+      background: transparent;
+      padding: 8px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--ink-ground);
+      width: 100%;
+      border-radius: 0;
+      transition: border-bottom-color 200ms ease;
+    }
+
+    .sys-input-field:focus {
+      outline: none;
+      border-bottom-color: var(--mesh-accent-alpha);
+    }
+
+    .sys-select-field {
+      border: none;
+      border-bottom: 1px solid var(--ink-ground);
+      background: transparent;
+      padding: 8px 0;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--ink-ground);
+      width: 100%;
+      border-radius: 0;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 4px center;
+      transition: border-bottom-color 200ms ease;
+      white-space: normal;
+      word-break: normal;
+      text-overflow: clip;
+    }
+
+    .sys-select-field:focus {
+      outline: none;
+      border-bottom-color: var(--mesh-accent-alpha);
+    }
+
+    /* Column 2: Dialogue Canvas Slates & Middle Column Wrapper */
+    .sys-column-middle {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      order: 2;
+    }
+
+    .sys-script-slate {
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--ink-ground);
+      border-radius: var(--chassis-radius-deep);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
+    }
+
+    .sys-script-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      border-bottom: 1px solid rgba(34, 34, 34, 0.1);
+      padding-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .sys-script-text {
+      white-space: pre-wrap;
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      color: var(--ink-ground);
+      line-height: 1.6;
+    }
+
+    .sys-script-text strong {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      color: var(--mesh-accent-alpha);
+      background-color: rgba(83, 65, 205, 0.08);
+      padding: 2px 6px;
+      border-radius: var(--chassis-radius-sharp);
+    }
+
+    /* Column 2 Action Chassis */
+    .sys-download-chassis {
+      margin-top: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* Premium Pricing Display */
+    .sys-pricing-container {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+    }
+
+    .sys-price-strikethrough {
+      text-decoration: line-through;
+      opacity: 0.45;
+      color: var(--ink-ground);
+    }
+
+    .sys-price-free {
+      color: var(--mesh-accent-alpha);
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* Harmonized CTA Buttons */
+    .sys-action-trigger {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--mesh-accent-alpha);
+      color: #FFFFFF;
+      border: 1.5px solid var(--ink-ground);
+      border-radius: 6px;
+      padding: 16px 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: transform 380ms cubic-bezier(0.19, 1, 0.22, 1), box-shadow 380ms cubic-bezier(0.19, 1, 0.22, 1), background-color 200ms ease;
+      box-shadow: 4px 4px 0px 0px var(--ink-ground);
+      width: 100%;
+      text-align: center;
+    }
+
+    .sys-action-trigger:hover {
+      transform: translate3d(-2px, -2px, 0);
+      box-shadow: 6px 6px 0px 0px var(--ink-ground);
+    }
+
+    .sys-action-trigger:active {
+      transform: translate3d(2px, 2px, 0);
+      box-shadow: 2px 2px 0px 0px var(--ink-ground);
+    }
+
+    .sys-action-trigger:disabled {
+      background-color: rgba(34, 34, 34, 0.15);
+      color: rgba(34, 34, 34, 0.4);
+      border-color: rgba(34, 34, 34, 0.2);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Column 3: Social Vault Card */
+    .sys-hero-right {
+      background-color: var(--token-fluid-blush);
+      border-radius: var(--chassis-radius-deep);
+      border: 1.5px solid var(--ink-ground);
+      padding: calc(var(--sys-pacing-unit) * 6);
+      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 24px;
+      transition: transform 380ms cubic-bezier(0.19, 1, 0.22, 1), box-shadow 380ms cubic-bezier(0.19, 1, 0.22, 1);
+      width: 100%;
+      order: 3;
+      height: 100%;
+      justify-content: space-between;
+    }
+
+    .sys-hero-right:hover {
+      transform: translate3d(-4px, -4px, 0);
+      box-shadow: 8px 8px 0px 0px var(--mesh-accent-alpha);
+    }
+
+    .sys-vault-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .sys-tag-status {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-ground);
+      padding: 4px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border: 1px solid var(--ink-ground);
+    }
+
+    .sys-tag-status.locked {
+      background-color: #FFFFFF;
+    }
+
+    .sys-tag-status.authorized {
+      background-color: var(--token-fluid-mint);
+    }
+
+    .sys-title-vault {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 28px;
+      letter-spacing: -0.01em;
+      line-height: 1.2;
+    }
+
+    .sys-vault-body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .sys-vault-copy {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(34, 34, 34, 0.85);
+      line-height: 1.6;
+    }
+
+    /* Cryptographic Key Box - Brutalist terminal slate layout */
+    .sys-crypto-keybox-brutalist {
+      background: var(--ink-ground);
+      color: #FFFFFF;
+      padding: calc(var(--sys-pacing-unit) * 3);
+      border-radius: var(--chassis-radius-sharp);
+      border: 1.5px solid var(--ink-ground);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      text-align: left;
+    }
+
+    .sys-crypto-label-brutalist {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 10px;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .sys-crypto-input-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+      padding-bottom: 8px;
+    }
+
+    .sys-input-field-key {
+      background: transparent;
+      border: none;
+      color: var(--token-fluid-mint); /* High-contrast emerald readout text */
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      width: 100%;
+      pointer-events: all;
+      outline: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .sys-btn-copy {
+      background: #FFFFFF;
+      color: var(--ink-ground);
+      border: 1px solid var(--ink-ground);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 2px 2px 0px 0px var(--mesh-accent-alpha);
+      transition: transform 0.1s ease;
+      padding: 6px 12px;
+      text-transform: uppercase;
+      border-radius: var(--chassis-radius-sharp);
+      flex-shrink: 0;
+    }
+
+    .sys-btn-copy:hover {
+      transform: translate3d(-1px, -1px, 0);
+      box-shadow: 3px 3px 0px 0px var(--mesh-accent-alpha);
+    }
+
+    .sys-btn-copy:active {
+      transform: translate3d(1px, 1px, 0);
+      box-shadow: 1px 1px 0px 0px var(--mesh-accent-alpha);
+    }
+
+    .sys-btn-secondary {
+      background-color: transparent;
+      color: var(--ink-ground);
+      border: 1.5px solid var(--ink-ground);
+      border-radius: 6px;
+      padding: 12px 18px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-transform: uppercase;
+      text-align: center;
+      transition: background-color 200ms ease;
+    }
+
+    .sys-btn-secondary:hover {
+      background-color: rgba(34, 34, 34, 0.05);
+    }
+
+    /* Module 03: Open-Source Components Registry */
+    .sys-registry-panel {
+      margin-top: 96px; /* Explicit Spatial Cushion */
+      margin-bottom: 80px;
+      border-top: var(--sys-border-path);
+      padding-top: 48px;
+    }
+
+    .sys-registry-header {
+      margin-bottom: 32px;
+    }
+
+    .sys-registry-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 24px;
+      letter-spacing: -0.01em;
+      text-transform: uppercase;
+    }
+
+    .sys-project-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+    }
+
+    @media (min-width: 768px) {
+      .sys-project-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+
+    .sys-project-card {
+      background-color: #FFFFFF;
+      border: 1.5px solid var(--ink-ground);
+      border-radius: var(--chassis-radius-deep);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      min-height: 220px;
+      justify-content: space-between;
+      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
+      transition: transform 380ms cubic-bezier(0.19, 1, 0.22, 1), box-shadow 380ms cubic-bezier(0.19, 1, 0.22, 1);
+    }
+
+    .sys-project-card:hover {
+      transform: translate3d(-4px, -4px, 0);
+      box-shadow: 8px 8px 0px 0px var(--mesh-accent-alpha);
+    }
+
+    .sys-project-card.mint-theme {
+      background-color: var(--token-fluid-mint);
+    }
+
+    .sys-project-card.sand-theme {
+      background-color: var(--token-fluid-sand);
+    }
+
+    .sys-tag-caps {
+      display: inline-block;
+      align-self: flex-start;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sys-tag-caps.status-sand {
+      background-color: var(--token-fluid-sand);
+      color: var(--ink-ground);
+    }
+
+    .sys-tag-caps.status-mint {
+      background-color: var(--token-fluid-mint);
+      color: var(--ink-ground);
+    }
+
+    .sys-tag-caps.status-blush {
+      background-color: var(--token-fluid-blush);
+      color: var(--ink-ground);
+    }
+
+    .sys-title-h3 {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+    }
+
+    .sys-project-card p {
+      font-size: 13.5px;
+      color: rgba(34, 34, 34, 0.85);
+      line-height: 1.5;
+    }
+
+    /* Module 04: Live Performance Telemetry Terminal */
+    .sys-terminal-panel {
+      margin-top: auto;
+      margin-bottom: 32px;
+      border-top: var(--sys-border-path);
+      padding-top: 32px;
+    }
+
+    .sys-terminal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: rgba(34, 34, 34, 0.6);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .sys-terminal-shell {
+      background-color: #222222;
+      border-radius: var(--chassis-radius-sharp);
+      border: 1px solid rgba(34, 34, 34, 0.2);
+      padding: 20px;
+      max-height: 220px;
+      overflow-y: auto;
+      box-shadow: inset 0px 2px 8px rgba(0,0,0,0.5);
+    }
+
+    .sys-terminal-console {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #A3E635;
+      line-height: 1.6;
+      white-space: pre-wrap;
+    }
+
+    /* Baseline System Footer */
+    .sys-footer {
+      border-top: var(--sys-border-path);
+      padding: 24px 0;
+      display: flex;
+      justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: rgba(34, 34, 34, 0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* System Toast notification system */
+    .sys-toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .sys-toast {
+      background-color: #222222;
+      color: #FFFFFF;
+      border: 1px solid var(--mesh-accent-alpha);
+      border-radius: var(--chassis-radius-sharp);
+      padding: 16px 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      box-shadow: 4px 4px 0px 0px var(--mesh-accent-alpha);
+      animation: toast-ingress 300ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+      max-width: 320px;
+      word-break: break-all;
+    }
+
+    @keyframes toast-ingress {
+      from { transform: translate3d(100%, 0, 0); opacity: 0; }
+      to { transform: translate3d(0, 0, 0); opacity: 1; }
+    }
+
+    /* Simulated Razorpay Brutalist Modal Component */
+    .sys-checkout-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: rgba(34, 34, 34, 0.7);
+      backdrop-filter: blur(2px);
+      z-index: 9999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+
+    .sys-checkout-dialog {
+      background-color: #FFFFFF;
+      border: 2px solid var(--ink-ground);
+      border-radius: var(--chassis-radius-deep);
+      box-shadow: 8px 8px 0px 0px var(--mesh-accent-alpha);
+      max-width: 480px;
+      width: 100%;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      animation: dialog-ingress 400ms cubic-bezier(0.19, 1, 0.22, 1) forwards;
+    }
+
+    @keyframes dialog-ingress {
+      from { transform: scale(0.95) translate3d(0, 20px, 0); opacity: 0; }
+      to { transform: scale(1) translate3d(0, 0, 0); opacity: 1; }
+    }
+
+    .sys-checkout-header {
+      border-bottom: 2px dashed rgba(34, 34, 34, 0.15);
+      padding-bottom: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .sys-checkout-merchant {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--mesh-accent-alpha);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .sys-checkout-title {
+      font-family: 'Hanken Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink-ground);
+    }
+
+    .sys-checkout-itemization {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      background-color: var(--canvas-core);
+      padding: 16px;
+      border-radius: var(--chassis-radius-sharp);
+    }
+
+    .sys-itemization-row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .sys-itemization-label {
+      color: rgba(34, 34, 34, 0.5);
+    }
+
+    .sys-itemization-value {
+      font-weight: 700;
+    }
+
+    .sys-checkout-actions {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+    }
+
+    @media (min-width: 480px) {
+      .sys-checkout-actions {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="sys-portal-chassis">
+    
+    <!-- Module 01: Sticky Navigation Bar -->
+    <nav class="sys-navbar">
+      <div class="sys-nav-left">
+        ▲ ADITYA SHARMA // FULL STACK & AGENTIC AI SYSTEMS ORCHESTRATOR
+      </div>
+      <div class="sys-nav-right">
+        <a href="https://github.com/adityaarchsystems" target="_blank" rel="noopener noreferrer" class="sys-nav-link">github.com/adityaarchsystems</a>
+        <br>
+        <a href="https://x.com/adityasysarch" target="_blank" rel="noopener noreferrer" class="sys-nav-link">x.com/adityasysarch</a>
+      </div>
+    </nav>
+
+    <!-- Module 02: Typographical Hero Section -->
+    <header class="sys-hero-text-block">
+      <div class="sys-hero-eyebrow">
+        [ SYSTEM_PROTOCOL // VOICE_SYNTHESIS_INGRESS_ENGINE ]
+      </div>
+      <h1 class="sys-title-hero">
+        Train your system persona on authentic pacing core.
+      </h1>
+      <p class="sys-body-copy">
+        The Calyx Ingress dataset distribution platform hosts the 30-minute dual-language phoneme saturation training script model. Calibrate target variables to configure custom scripts for voice synthesis.
+      </p>
+    </header>
+
+    <!-- Module 03: 3-Column Feature Coalition Grid -->
+    <div class="sys-portal-grid">
+      
+      <!-- Column 1: Config Dashboard Input Panel (25% Width) -->
+      <aside class="sys-control-dashboard">
+        <div class="sys-dashboard-title-bar">
+          <span class="sys-field-label" style="color: var(--mesh-accent-alpha); font-weight: 700;">DASHBOARD // CONFIG_INGRESS</span>
+        </div>
+
+        <div class="sys-field-container">
+          <label for="input-target-name" class="sys-field-label">TARGET_OPERATOR_NAME</label>
+          <input type="text" id="input-target-name" class="sys-input-field" placeholder="INPUT TARGET VARIABLE" autocomplete="off">
+        </div>
+
+        <div class="sys-field-container">
+          <label for="input-target-city" class="sys-field-label">TARGET_OPERATOR_CITY</label>
+          <input type="text" id="input-target-city" class="sys-input-field" placeholder="INPUT TARGET METADATA" autocomplete="off">
+        </div>
+
+        <div class="sys-field-container">
+          <label for="input-target-verb" class="sys-field-label">VERB_DECLENSION_STATE</label>
+          <select id="input-target-verb" class="sys-select-field">
+            <option value="neutral">GENERAL GENDER-NEUTRAL ARRAY [karta hoon / karti hoon]</option>
+            <option value="masculine">MASCULINE CONFIGURATION [karta hoon / doonga]</option>
+            <option value="feminine">FEMININE CONFIGURATION [karti hoon / doongi]</option>
+          </select>
+        </div>
+
+        <div class="sys-field-container">
+          <label for="input-target-email" class="sys-field-label">DELIVERY_NETWORK_EMAIL</label>
+          <input type="email" id="input-target-email" class="sys-input-field" placeholder="ENTER VALID INGRESS EMAIL" autocomplete="off">
+        </div>
+      </aside>
+
+      <!-- Column 2: Dialogue Canvas (50% Width) -->
+      <main class="sys-column-middle">
+        
+        <!-- English Slate -->
+        <div class="sys-script-slate">
+          <div class="sys-script-title">
+            <span>INGRESS_NODE_01 // SYSTEM_CALIBRATION_ENGLISH</span>
+            <span class="sys-tag-caps status-mint">TIMESTAMP: 00:00 - 03:00</span>
+          </div>
+          <div id="script-english" class="sys-script-text"></div>
+        </div>
+
+        <!-- Hinglish Slate -->
+        <div class="sys-script-slate">
+          <div class="sys-script-title">
+            <span>INGRESS_NODE_02 // SYSTEM_CALIBRATION_HINGLISH</span>
+            <span class="sys-tag-caps status-blush">TIMESTAMP: 03:00 - 06:00</span>
+          </div>
+          <div id="script-hinglish" class="sys-script-text"></div>
+        </div>
+
+        <!-- Download Action Chassis -->
+        <div class="sys-download-chassis">
+          
+          <div class="sys-pricing-container">
+            <span class="sys-price-strikethrough">$21 USD</span>
+            <span class="sys-price-free">FREE</span>
+          </div>
+
+          <button type="button" id="trigger-checkout" class="sys-action-trigger">
+            INITIALIZE DOWNLOAD PROTOCOL
+          </button>
+
+        </div>
+
+      </main>
+
+      <!-- Column 3: Social Vault Card (25% Width) -->
+      <aside class="sys-hero-right">
+        
+        <div class="sys-vault-header">
+          <div id="vault-status-badge" class="sys-tag-status locked">
+            [ SYSTEM_VAULT: LOCKED ]
+          </div>
+          <h2 class="sys-title-vault">
+            Tier 2 secure payload download portal
+          </h2>
+        </div>
+
+        <div class="sys-vault-body">
+          <p class="sys-vault-copy">
+            The secondary authentication layer locks access to the snap canvas engines. Validate your follow relationship with @adityasysarch via the gateway node authorization loop to unlock.
+          </p>
+
+          <!-- Decrypted Ingress Access Monospace Panel -->
+          <div id="vault-crypto-zone" style="display: none; width: 100%;">
+            <div class="sys-crypto-keybox-brutalist">
+              <div class="sys-crypto-label-brutalist">DECRYPTED_INGRESS_ACCESS_KEY</div>
+              <div class="sys-crypto-input-wrapper">
+                <input type="text" id="crypto-value" class="sys-input-field-key" readonly>
+                <button type="button" id="trigger-copy-key" class="sys-btn-copy">
+                  [ COPY ]
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Auth Action trigger Strictly Nested inside Card -->
+        <button type="button" id="trigger-auth" class="sys-action-trigger" style="margin-top: auto;">
+          AUTHENTICATE VIA X GATEWAY
+        </button>
+
+        <!-- Decorative Diagnostic Telemetry Log Strip at absolute base of authorized view -->
+        <div id="vault-diagnostic-strip" style="display: none; width: 100%; margin-top: auto; text-align: left;">
+          <pre style="font-family: 'JetBrains Mono', monospace; font-size: 10px; opacity: 0.5; text-transform: uppercase; line-height: 1.4; white-space: pre-wrap; margin: 0; border: none; background: transparent; padding: 0; color: var(--ink-ground);">--------------------------------------------------
+[ INGRESS_GATE_SECURE // ARCHITECTURAL_ASSET_v1 ]
+[ AUTHORIZED_SESSION_TOKEN_HASH_VERIFIED_OK ]
+--------------------------------------------------</pre>
+        </div>
+
+      </aside>
+
+    </div>
+
+    <!-- Module 04: System Components Registry -->
+    <section class="sys-registry-panel">
+      <div class="sys-registry-header">
+        <h2 class="sys-registry-title">PROJECTS // OPEN_SOURCE</h2>
+      </div>
+
+      <div class="sys-project-grid">
+        
+        <!-- Card A: Voice Ingress Protocol -->
+        <div class="sys-project-card mint-theme">
+          <div class="sys-tag-caps status-mint">CORE_01 // DATASET</div>
+          <h3 class="sys-title-h3">Voice Script Core</h3>
+          <p>Standardized phonetic dialogue arrays calibrated to train advanced machine speech models on colloquial Hinglish and English modes.</p>
+          <a href="https://github.com/adityaarchsystems/voice-ingress-protocol" target="_blank" rel="noopener noreferrer" class="sys-btn-secondary" style="text-decoration: none;">INSPECT REPOSITORY →</a>
+        </div>
+
+        <!-- Card B: Calyx Apex Engine -->
+        <div class="sys-project-card sand-theme">
+          <div class="sys-tag-caps status-sand">CORE_02 // SYSTEM_CORE</div>
+          <h3 class="sys-title-h3">Calyx Apex Engine</h3>
+          <p>Automated system orchestration and performance instrumentation framework optimized for high-throughput edge nodes.</p>
+          <a href="https://github.com/adityaarchsystems/calyx-apex" target="_blank" rel="noopener noreferrer" class="sys-btn-secondary" style="text-decoration: none;">INSPECT REPOSITORY →</a>
+        </div>
+
+        <!-- Card C: Calyx Snap Canvas -->
+        <div class="sys-project-card">
+          <div class="sys-tag-caps status-blush">CORE_03 // INTERFACE</div>
+          <h3 class="sys-title-h3">Calyx Snap Canvas</h3>
+          <p>High-fidelity client rendering grid designed to generate interactive vector overlays dynamically with zero load-time footprint.</p>
+          <a href="https://github.com/adityaarchsystems/calyx-snap-canvas" target="_blank" rel="noopener noreferrer" class="sys-btn-secondary" style="text-decoration: none;">INSPECT REPOSITORY →</a>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Module 05: Live Log Telemetry monitor -->
+    <footer class="sys-terminal-panel">
+      <div class="sys-terminal-header">
+        <span>AG-KIT // INFRASTRUCTURE MONITOR: LOCAL_MODEL_ORCHESTRATION_LOGS</span>
+        <span id="terminal-clock">UTC 12:52:54</span>
+      </div>
+      <div class="sys-terminal-shell">
+        <div id="terminal-console" class="sys-terminal-console"></div>
+      </div>
+    </footer>
+
+    <!-- Baseline Footer -->
+    <footer class="sys-footer">
+      <div>[ ADITYA SHARMA // ARCHITECTURAL UTILITIES 2026 ]</div>
+      <div>[ ENVIRONMENT: LOCAL_SIMULATION // PIPELINE: SECURE ]</div>
+    </footer>
+
+  </div>
+
+  <!-- Simulated Razorpay Brutalist Modal -->
+  <div id="checkout-overlay" class="sys-checkout-overlay">
+    <div class="sys-checkout-dialog">
+      <div class="sys-checkout-header">
+        <div class="sys-checkout-merchant">RAZORPAY CHECKOUT INTERFACE // SIMULATION</div>
+        <div class="sys-checkout-title">Confirm Checkout Ingress</div>
+      </div>
+      
+      <div class="sys-checkout-itemization">
+        <div class="sys-itemization-row">
+          <span class="sys-itemization-label">MERCHANT_ACCESS_TOKEN</span>
+          <span id="checkout-key-display" class="sys-itemization-value"></span>
+        </div>
+        <div class="sys-itemization-row">
+          <span class="sys-itemization-label">PAYMENT_PRODUCT</span>
+          <span class="sys-itemization-value">VOICE_SCRIPT_CORE_GENERAL</span>
+        </div>
+        <div class="sys-itemization-row">
+          <span class="sys-itemization-label">TARGET_OPERATOR</span>
+          <span id="checkout-operator-display" class="sys-itemization-value"></span>
+        </div>
+        <div class="sys-itemization-row">
+          <span class="sys-itemization-label">DELIVERY_INGRESS</span>
+          <span id="checkout-email-display" class="sys-itemization-value"></span>
+        </div>
+        <div class="sys-itemization-row" style="border-top: 1px dashed rgba(34,34,34,0.15); padding-top: 8px; margin-top: 4px;">
+          <span class="sys-itemization-label">TRANSACTION_VALUE</span>
+          <span class="sys-itemization-value" style="color: var(--mesh-accent-alpha);">FREE</span>
+        </div>
+      </div>
+
+      <div class="sys-checkout-actions">
+        <button type="button" id="trigger-payment-success" class="sys-action-trigger" style="padding: 12px; text-transform: uppercase;">
+          SIMULATE SUCCESS
+        </button>
+        <button type="button" id="trigger-payment-cancel" class="sys-btn-secondary" style="border: 1.5px solid var(--ink-ground);">
+          CANCEL TRANSACTION
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- System Toast Notification Box Container -->
+  <div id="toast-container" class="sys-toast-container"></div>
+
+  <!-- Core Javascript Architecture -->
+  <script>
+    // Configuration Object Isolation Protocol
+    window.CalyxConfig = {
+      razorpayKey: 'rzp_test_simulation_mode',
+      gitRepo: 'github.com/adityaarchsystems',
+      xProfile: 'x.com/adityasysarch',
+      verificationEndpoint: '/api/verify-follow'
+    };
+
+    // System Voice Training Script Registry (JSON Dictionary Array)
+    const voiceScriptsRegistry = [
+      {
+        id: "sc_english",
+        lines: [
+          "Initiating voice profile validation sequence for node {name}.",
+          "Confirming network access configurations from location {city}. Ensure local latency parameters remain below twelve milliseconds.",
+          "The system logs indicate active status. I am currently verifying the security certificate parameters."
+        ]
+      },
+      {
+        id: "sc_hinglish",
+        lines: [
+          "Mera naam {name} hai, aur main abhi {city} se system operations setup {verb_karta}.",
+          "Is test line ka purpose voice model validation matrix ko calibrate karna hai.",
+          "Agar validation complete ho jata hai, toh main secondary vault access code update kar {verb_doong}."
+        ]
+      }
+    ];
+
+    // Local state management
+    const state = {
+      name: "",
+      city: "",
+      verbState: "neutral",
+      email: "",
+      vaultLocked: true,
+      authProcessing: false
+    };
+
+    // Element bindings
+    const elName = document.getElementById("input-target-name");
+    const elCity = document.getElementById("input-target-city");
+    const elVerb = document.getElementById("input-target-verb");
+    const elEmail = document.getElementById("input-target-email");
+    const elTriggerCheckout = document.getElementById("trigger-checkout");
+    const elTriggerAuth = document.getElementById("trigger-auth");
+    const elTriggerCopyKey = document.getElementById("trigger-copy-key");
+    const elScriptEnglish = document.getElementById("script-english");
+    const elScriptHinglish = document.getElementById("script-hinglish");
+    const elTerminalConsole = document.getElementById("terminal-console");
+    const elTerminalClock = document.getElementById("terminal-clock");
+    const elVaultBadge = document.getElementById("vault-status-badge");
+    const elVaultZone = document.getElementById("vault-crypto-zone");
+    const elCryptoValue = document.getElementById("crypto-value");
+
+    // Checkout Dialog Elements
+    const elCheckoutOverlay = document.getElementById("checkout-overlay");
+    const elCheckoutKey = document.getElementById("checkout-key-display");
+    const elCheckoutOperator = document.getElementById("checkout-operator-display");
+    const elCheckoutEmail = document.getElementById("checkout-email-display");
+    const elTriggerPaySuccess = document.getElementById("trigger-payment-success");
+    const elTriggerPayCancel = document.getElementById("trigger-payment-cancel");
+
+    // Dynamic Copy replacement helpers
+    function renderScripts() {
+      const nameReplacement = state.name ? `<strong>${state.name}</strong>` : "<u>[YOUR_NAME]</u>";
+      const cityReplacement = state.city ? `<strong>${state.city}</strong>` : "<u>[YOUR_CITY]</u>";
+      
+      let verbKartaText = "<u>[karta hoon / karti hoon]</u>";
+      let verbDoongText = "<u>[doonga / doongi]</u>";
+
+      if (state.verbState === "masculine") {
+        verbKartaText = "<strong>karta hoon</strong>";
+        verbDoongText = "<strong>doonga</strong>";
+      } else if (state.verbState === "feminine") {
+        verbKartaText = "<strong>karti hoon</strong>";
+        verbDoongText = "<strong>doongi</strong>";
+      }
+
+      // Render English
+      const engTemplate = voiceScriptsRegistry.find(s => s.id === "sc_english");
+      const engLinesHtml = engTemplate.lines.map(line => {
+        return line.replace(/{name}/g, nameReplacement).replace(/{city}/g, cityReplacement);
+      }).join("\n\n");
+      elScriptEnglish.innerHTML = engLinesHtml;
+
+      // Render Hinglish
+      const hinTemplate = voiceScriptsRegistry.find(s => s.id === "sc_hinglish");
+      const hinLinesHtml = hinTemplate.lines.map(line => {
+        return line.replace(/{name}/g, nameReplacement)
+                   .replace(/{city}/g, cityReplacement)
+                   .replace(/{verb_karta}/g, verbKartaText)
+                   .replace(/{verb_doong}/g, verbDoongText);
+      }).join("\n\n");
+      elScriptHinglish.innerHTML = hinLinesHtml;
+    }
+
+    // Dynamic State Observers
+    elName.addEventListener("input", (e) => {
+      state.name = e.target.value.trim();
+      renderScripts();
+    });
+
+    elCity.addEventListener("input", (e) => {
+      state.city = e.target.value.trim();
+      renderScripts();
+    });
+
+    elVerb.addEventListener("change", (e) => {
+      state.verbState = e.target.value;
+      renderScripts();
+    });
+
+    elEmail.addEventListener("input", (e) => {
+      state.email = e.target.value.trim();
+    });
+
+    // Toast utility
+    function showToast(message) {
+      const container = document.getElementById("toast-container");
+      const toast = document.createElement("div");
+      toast.className = "sys-toast";
+      toast.textContent = message;
+      container.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = "none";
+        toast.style.transition = "opacity 300ms ease, transform 300ms ease";
+        toast.style.opacity = "0";
+        toast.style.transform = "translate3d(20px, 0, 0)";
+        setTimeout(() => toast.remove(), 300);
+      }, 4000);
+    }
+
+    // Simulation logs to console
+    function addTerminalLog(message, worker = "SYSTEM") {
+      const timestamp = new Date().toISOString();
+      const formattedLog = `[${timestamp}] [WORKER_${worker}] ${message}\n`;
+      elTerminalConsole.textContent += formattedLog;
+      elTerminalConsole.scrollTop = elTerminalConsole.scrollHeight;
+    }
+
+    // Checkout Handlers
+    elTriggerCheckout.addEventListener("click", () => {
+      if (!state.email) {
+        showToast("Error: Verification deficit. Delivery network email required.");
+        return;
+      }
+      if (!state.name || !state.city) {
+        showToast("Error: Target name or location details required.");
+        return;
+      }
+
+      // Open mock Checkout modal
+      elCheckoutKey.textContent = window.CalyxConfig.razorpayKey;
+      elCheckoutOperator.textContent = state.name;
+      elCheckoutEmail.textContent = state.email;
+      elCheckoutOverlay.style.display = "flex";
+      
+      addTerminalLog("Initialized Razorpay checkout dialogue modal pass.", "INGRESS_GATE");
+    });
+
+    elTriggerPaySuccess.addEventListener("click", () => {
+      elCheckoutOverlay.style.display = "none";
+      const mockPaymentId = `pay_sim_${Math.random().toString(36).substring(2, 10).toUpperCase()}`;
+      
+      addTerminalLog(`Checkout sequence completed successfully. Transaction ID: ${mockPaymentId}`, "RAZORPAY_API");
+      showToast(`Success: Access keys dispatched to target delivery node.`);
+      
+      // Simulate download trigger
+      addTerminalLog(`Dispatched download link payload for Voice Script Core to network queue.`, "DISTRIBUTION");
+    });
+
+    elTriggerPayCancel.addEventListener("click", () => {
+      elCheckoutOverlay.style.display = "none";
+      addTerminalLog("Checkout sequence terminated by client. Transaction aborted.", "INGRESS_GATE");
+      showToast("Transaction cancelled.");
+    });
+
+    // Authentication simulation & PKCE redirection interceptor
+    elTriggerAuth.addEventListener("click", () => {
+      if (state.authProcessing) return;
+      
+      if (!state.vaultLocked) {
+        showToast("Vault is already authorized.");
+        return;
+      }
+
+      state.authProcessing = true;
+      elTriggerAuth.disabled = true;
+      elTriggerAuth.textContent = "[ AUTHORIZING_SECURE_TOKEN... ]";
+      
+      addTerminalLog("Generating OAuth 2.0 PKCE code challenge and state keys.", "AUTH_GATE");
+
+      // Redirect client on the same page using simulated callback query code
+      setTimeout(() => {
+        const callbackUrl = window.location.origin + window.location.pathname + "?code=oauth_pkce_token_calyx_99a8";
+        addTerminalLog(`Redirecting callback loop to redirection URI: ${callbackUrl}`, "AUTH_GATE");
+        window.location.href = callbackUrl;
+      }, 1500);
+    });
+
+    // Check query parameters during mounting sequence
+    window.addEventListener("DOMContentLoaded", () => {
+      // Clock synchronization
+      setInterval(() => {
+        elTerminalClock.textContent = `UTC ${new Date().toISOString().substring(11, 19)}`;
+      }, 1000);
+
+      // Populate base terminal logs
+      addTerminalLog("AG-KIT Ingress Swarm initialized successfully.");
+      addTerminalLog("AGENT_MESH_STATE        : ACTIVE // LIVE_MESH_RUNNING");
+      addTerminalLog("MODEL_TARGET_PROFILE    : GEMINI 3.5 FLASH [ CONTEXT_WINDOW: 1.2M LOC ]");
+      addTerminalLog("LOCAL_EMBEDDING_ENGINE  : ACTIVE // snapping local vector paths...");
+      addTerminalLog("ACTIVE_SUBAGENT_THREADS : 04 [ WORKER_01: UX_AUDIT // WORKER_02: COMPILER ]");
+
+      // Run initial render for dynamic script arrays
+      renderScripts();
+
+      // Check session storage for existing auth to make it robust
+      if (sessionStorage.getItem("calyx_vault_authorized") === "true") {
+        state.vaultLocked = false;
+        elVaultBadge.textContent = "[ SYSTEM_VAULT: AUTHORIZED ]";
+        elVaultBadge.className = "sys-tag-status authorized";
+        elVaultZone.style.display = "block";
+        const base64DownloadKey = "aHR0cHM6Ly9naXRodWIuY29tL2FkaXR5YWFyY2hzeXN0ZW1zL3ZvaWNlLXNjcmlwdC1jb3Jl";
+        elCryptoValue.value = base64DownloadKey;
+        elTriggerAuth.style.display = "none";
+        document.getElementById("vault-diagnostic-strip").style.display = "block";
+        addTerminalLog("CONNECTED_USER: @developer_node // FOLLOW STATUS: VERIFIED // ACCESS KEY RELEASED", "API_SEC");
+        return;
+      }
+
+      // Intercept code query parameter
+      const urlParams = new URLSearchParams(window.location.search);
+      const authCode = urlParams.get("code");
+
+      if (authCode) {
+        // Clean URL parameter to prevent reload loop
+        const urlWithoutCode = window.location.protocol + "//" + window.location.host + window.location.pathname;
+        window.history.replaceState({}, document.title, urlWithoutCode);
+
+        addTerminalLog(`Intercepted callback redirection authorization code: [${authCode}]`, "AUTH_GATE");
+        
+        // Disable auth trigger and show loading
+        elTriggerAuth.disabled = true;
+        elTriggerAuth.textContent = "[ AUTHORIZING_SECURE_TOKEN... ]";
+        
+        addTerminalLog(`Pushing verification payload to gateway node: ${window.CalyxConfig.verificationEndpoint}`, "AUTH_GATE");
+        
+        // Simulating the serverless verification logic handshake
+        setTimeout(() => {
+          addTerminalLog("X API response state 200 OK. Resolving verification follow status for target: @adityasysarch", "API_SEC");
+          
+          setTimeout(() => {
+            state.vaultLocked = false;
+            state.authProcessing = false;
+            sessionStorage.setItem("calyx_vault_authorized", "true");
+            
+            // Clean interface transitions
+            elVaultBadge.textContent = "[ SYSTEM_VAULT: AUTHORIZED ]";
+            elVaultBadge.className = "sys-tag-status authorized";
+            
+            elVaultZone.style.display = "block";
+            
+            // Base64 cryptographic download key injection
+            const base64DownloadKey = "aHR0cHM6Ly9naXRodWIuY29tL2FkaXR5YWFyY2hzeXN0ZW1zL3ZvaWNlLXNjcmlwdC1jb3Jl";
+            elCryptoValue.value = base64DownloadKey;
+            
+            elTriggerAuth.style.display = "none";
+            document.getElementById("vault-diagnostic-strip").style.display = "block";
+            
+            // Identity update string log output
+            addTerminalLog("CONNECTED_USER: @developer_node // FOLLOW STATUS: VERIFIED // ACCESS KEY RELEASED", "API_SEC");
+            showToast("System Vault Authorized. Cryptographic key decrypted.");
+          }, 1000);
+
+        }, 1200);
+      }
+    });
+
+    // Copy to clipboard mechanism
+    elTriggerCopyKey.addEventListener("click", () => {
+      const keyVal = elCryptoValue.value;
+      navigator.clipboard.writeText(keyVal).then(() => {
+        showToast("Success: Access token saved to clipboard.");
+        addTerminalLog("Cryptographic token key successfully exported to client system clipboard.", "SYSTEM");
+        
+        // Feedback state [ COPIED ]
+        elTriggerCopyKey.textContent = "[ COPIED ]";
+        setTimeout(() => {
+          elTriggerCopyKey.textContent = "[ COPY ]";
+        }, 2000);
+      }).catch(err => {
+        showToast("Error: Clipboard write execution failed.");
+      });
+    });
+
+    // Live monitor loop simulating subagent logs
+    const simulatedSubagentMessages = [
+      { msg: "Context window usage: 824,192 / 1,200,000 tokens (68.6% loading efficiency). Temp: 0.15.", worker: "MODEL" },
+      { msg: "Active swarm nodes: 3 active threads. Worker thread #01 (UX_AUDIT) reported 0 visual collisions.", worker: "SUBAGENTS" },
+      { msg: "Local memory index telemetry: 14 persistent slot values loaded from MEMORY.md path.", worker: "MEMORY" },
+      { msg: "Telemetry ping resolved in 4.2ms. Local worker thread pool operating within safe performance brackets.", worker: "SYSTEM" },
+      { msg: "Checking CSS grid fractions layout constraints... 0 layout overlaps detected.", worker: "UX_AUDIT" },
+      { msg: "Scanning index.html structure for zero-template class compliance...", worker: "INGRESS" },
+      { msg: "Running local validation test runner compilation checks (checklist.py: OK).", worker: "COMPILER" },
+      { msg: "Calibrating edge node pipeline variables. Response state 200 OK.", worker: "COMPILER" },
+      { msg: "Monitoring network traffic integrity indices. Active tunnels: encrypted TLS 1.3.", worker: "API_SEC" },
+      { msg: "Checking memory safety vectors. No buffer leakage detected in compiler sandbox.", worker: "SYSTEM" }
+    ];
+
+    setInterval(() => {
+      const idx = Math.floor(Math.random() * simulatedSubagentMessages.length);
+      const logItem = simulatedSubagentMessages[idx];
+      addTerminalLog(logItem.msg, logItem.worker);
+    }, 8000); // loops every 8 seconds to stay clean but active
+  </script>
+
+</body>
+</html>

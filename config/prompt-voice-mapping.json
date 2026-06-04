@@ -1,0 +1,23 @@
+{
+  "schema_version": "2.0.0",
+  "mappings": [
+    {
+      "parameter": "TARGET_OPERATOR_NAME",
+      "weight_coefficient": 1.15,
+      "phonetic_bias": "neutral",
+      "target_node": "voice_core_nodes[0]"
+    },
+    {
+      "parameter": "TARGET_OPERATOR_CITY",
+      "weight_coefficient": 0.98,
+      "phonetic_bias": "regional",
+      "target_node": "voice_core_nodes[1]"
+    },
+    {
+      "parameter": "VERB_DECLENSION_STATE",
+      "weight_coefficient": 1.42,
+      "phonetic_bias": "dialect_dependent",
+      "target_node": "declension_nodes[2]"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "profile_name": "calyx_studio_baseline",
+  "noise_floor_db": -58.2,
+  "reverb_time_rt60_ms": 180,
+  "frequency_response": {
+    "100hz_db": -0.8,
+    "1khz_db": 0.0,
+    "10khz_db": -1.2
+  },
+  "isolation_factor_db": 42.5,
+  "calibration_status": "VERIFIED_OK"
+}
