@@ -459,13 +459,13 @@
     }
 
     /* Column 3: Social Vault Card */
-    .sys-portal-vault-card {
-      position: relative;
-      display: block;
-      height: 100%;
-      min-height: 480px;
-      box-sizing: border-box;
-      padding: calc(var(--sys-pacing-unit) * 6) calc(var(--sys-pacing-unit) * 6) 0 calc(var(--sys-pacing-unit) * 6);
+    .sys-vault-portal-card-chassis {
+      position: relative !important;
+      display: block !important;
+      height: 100% !important;
+      min-height: 480px !important;
+      box-sizing: border-box !important;
+      padding: 24px 24px 0px 24px !important;
       background-color: #F1C2D3;
       border-radius: var(--chassis-radius-sharp);
       border: 1px solid var(--ink-ground);
@@ -476,12 +476,12 @@
       order: 3;
     }
 
-    .sys-portal-vault-card:hover {
+    .sys-vault-portal-card-chassis:hover {
       transform: translate3d(-4px, -4px, 0);
       box-shadow: 8px 8px 0px 0px var(--mesh-accent-alpha);
     }
 
-    .sys-vault-upper-content-wrapper {
+    .sys-vault-text-node-cluster {
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -1057,9 +1057,9 @@
       </main>
 
       <!-- Column 3: Social Vault Card (25% Width) -->
-      <aside class="sys-hero-right sys-portal-vault-card">
+      <aside class="sys-hero-right sys-vault-portal-card-chassis">
         
-        <div class="sys-vault-upper-content-wrapper" style="margin-bottom: calc(var(--sys-pacing-unit) * 8);">
+        <div class="sys-vault-text-node-cluster" style="margin-bottom: 32px;">
           <div id="vault-status-badge" class="sys-tag-status locked">
             [ SYSTEM_VOLUME // LOCKED ]
           </div>
@@ -1072,13 +1072,13 @@
         </div>
 
         <!-- Absolute Baseline Dock Wrapper -->
-        <div class="sys-absolute-button-anchor-dock" style="
-            position: absolute;
-            bottom: calc(var(--sys-pacing-unit) * 6);
-            left: calc(var(--sys-pacing-unit) * 6);
-            right: calc(var(--sys-pacing-unit) * 6);
-            width: calc(100% - (calc(var(--sys-pacing-unit) * 12)));
-            z-index: 50;
+        <div class="sys-absolute-button-baseline-dock" style="
+            position: absolute !important;
+            bottom: 24px !important; /* Hard-anchors the button exactly 24px above the bottom edge of the card */
+            left: 24px !important;
+            right: 24px !important;
+            width: calc(100% - 48px) !important; /* Substracts horizontal padding parameters to match container margins */
+            z-index: 99 !important;
             display: flex;
             flex-direction: column;
             gap: 16px;
