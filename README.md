@@ -18,8 +18,6 @@ Operators can configure localized prompt tokens dynamically via the frontend con
 | CONFIGURATION PARAMETER | TARGET TARGET PROFILE VALUE | CORE INGRESS METRIC LIFECYCLE |
 | --- | --- | --- |
 | `OPERATOR NAME` | Programmatic Character String Variable | Native identity sanitization anchor |
-| `LOCATION METADATA` | Regional Environmental Metadata Token | Localized latency calibration anchor |
-| `LINGUISTIC CORE SETTING` | Asymmetric Gender/Pronoun Vector Match | Code-switching linguistic routing map |
 | `SECURE PORTAL EMAIL` | Secure Payload Ingress Destination | Zero-cost simulated Razorpay webhook |
 
 > [!IMPORTANT]

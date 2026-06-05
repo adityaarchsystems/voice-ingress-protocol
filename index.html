@@ -954,20 +954,6 @@
         </div>
 
         <div class="sys-field-container">
-          <label for="input-target-city" class="sys-field-label">LOCATION METADATA</label>
-          <input type="text" id="input-target-city" class="sys-input-field" placeholder="Enter city or recording region" autocomplete="off">
-        </div>
-
-        <div class="sys-field-container">
-          <label for="input-target-verb" class="sys-field-label">LINGUISTIC CORE SETTING</label>
-          <select id="input-target-verb" class="sys-select-field">
-            <option value="neutral">GENERAL GENDER-NEUTRAL ARRAY [karta hoon / karti hoon]</option>
-            <option value="masculine">MASCULINE CONFIGURATION [karta hoon / doonga]</option>
-            <option value="feminine">FEMININE CONFIGURATION [karti hoon / doongi]</option>
-          </select>
-        </div>
-
-        <div class="sys-field-container">
           <label for="input-target-email" class="sys-field-label">SECURE PORTAL EMAIL</label>
           <input type="email" id="input-target-email" class="sys-input-field" placeholder="Enter delivery network address" autocomplete="off">
         </div>
@@ -1226,8 +1212,6 @@
 
     // Element bindings
     const elName = document.getElementById("input-target-name");
-    const elCity = document.getElementById("input-target-city");
-    const elVerb = document.getElementById("input-target-verb");
     const elEmail = document.getElementById("input-target-email");
     const elTriggerCheckout = document.getElementById("trigger-checkout");
     const elScriptEnglish = document.getElementById("script-english");
@@ -1247,18 +1231,10 @@
     function renderScripts() {
       const nameReplacement = `<span class="sys-token-highlight">${state.name || "Damini"}</span>`;
       const cityReplacement = `<span class="sys-token-highlight">${state.city || "Indore"}</span>`;
-      
-      let sochtiVal = "sochti";
-      let boltiVal = "bolti";
-      let kartiVal = "karti";
-      let saktiVal = "sakti";
-
-      if (state.verbState === "masculine") {
-        sochtiVal = "sochta";
-        boltiVal = "bolta";
-        kartiVal = "karta";
-        saktiVal = "sakta";
-      }
+      const sochtiVal = "sochti / sochta";
+      const boltiVal = "bolti / bolta";
+      const kartiVal = "karti / karta";
+      const saktiVal = "sakti / sakta";
 
       const sochtiReplacement = `<span class="sys-token-highlight">${sochtiVal}</span>`;
       const boltiReplacement = `<span class="sys-token-highlight">${boltiVal}</span>`;
@@ -1288,16 +1264,6 @@
     // Dynamic State Observers
     elName.addEventListener("input", (e) => {
       state.name = e.target.value.trim();
-      renderScripts();
-    });
-
-    elCity.addEventListener("input", (e) => {
-      state.city = e.target.value.trim();
-      renderScripts();
-    });
-
-    elVerb.addEventListener("change", (e) => {
-      state.verbState = e.target.value;
       renderScripts();
     });
 
