@@ -32,13 +32,25 @@ export default async function handler(req, res) {
         const downloadUrl = `https://${supabaseProjectId}.supabase.co/storage/v1/object/public/voice-assets/AI_Clone_Training_Script.pdf`;
 
         await resend.emails.send({
-            from: 'Calyx Engine <onboarding@resend.dev>',
+            from: 'Aditya Sharma // Calyx Engine <onboarding@resend.dev>',
             to: email,
             subject: '▲ [ACCESS GRANTED] Voice Saturation Training Scripts',
-            html: `<p>Welcome to the orchestration framework, <strong>${name}</strong>.</p>
-                   <p>Your open-access directory token has been validated successfully.</p>
-                   <p><strong><a href="${downloadUrl}" download>Click Here to Instantly Download Your Training Scripts PDF Asset</a></strong></p>
-                   <p>Review the environment logs to prepare your local i7-14700 / RTX 5060 Ti node for optimization passes.</p>`
+            html: `<div style="font-family: monospace; padding: 24px; color: #1b1b1b; background-color: #F2E9DC;">
+                    <p>Welcome to the orchestration framework, <strong>${name}</strong>.</p>
+                    <p>Your open-access directory token has been validated successfully.</p>
+                    <p style="margin-top: 24px; margin-bottom: 24px;">
+                       <strong>
+                          <a href="${downloadUrl}" 
+                             download 
+                             style="padding: 12px 24px; background-color: #5341cd; color: #ffffff; text-decoration: none; border: 2px solid #1b1b1b; display: inline-block;">
+                             CLICK HERE TO INSTANTLY DOWNLOAD TRAINING PDF ASSET
+                          </a>
+                       </strong>
+                    </p>
+                    <p style="font-size: 11px; opacity: 0.6; border-top: 1px dashed #1b1b1b; padding-top: 12px;">
+                       System Egress Node // Calyx Architecture Framework 2026 // Hardware Target Validated: i7-14700 / RTX 5060 Ti
+                    </p>
+                   </div>`
         });
 
         return res.status(201).json({ success: true, message: 'Ingress verified and asset dispatched.' });
