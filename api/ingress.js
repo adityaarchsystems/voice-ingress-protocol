@@ -26,13 +26,19 @@ export default async function handler(req, res) {
         if (dbError) throw dbError;
 
         // 2. Automated Asset Delivery Dispatch via Resend API
+        const supabaseProjectId = process.env.SUPABASE_URL.startsWith('http')
+            ? process.env.SUPABASE_URL.split('.')[0].replace('https://', '').replace('http://', '')
+            : process.env.SUPABASE_URL;
+        const downloadUrl = `https://${supabaseProjectId}.supabase.co/storage/v1/object/public/voice-assets/AI_Clone_Training_Script.pdf`;
+
         await resend.emails.send({
-            from: 'Calyx Engine <onboarding@resend.dev>', // Update with custom verified domain later
+            from: 'Calyx Engine <onboarding@resend.dev>',
             to: email,
             subject: '▲ [ACCESS GRANTED] Voice Saturation Training Scripts',
             html: `<p>Welcome to the orchestration framework, <strong>${name}</strong>.</p>
                    <p>Your open-access directory token has been validated successfully.</p>
-                   <p><strong><a href="https://voice-ingress-protocol.vercel.app/">Click here to download your training scripts PDF asset directly.</a></strong></p>`
+                   <p><strong><a href="${downloadUrl}" download>Click Here to Instantly Download Your Training Scripts PDF Asset</a></strong></p>
+                   <p>Review the environment logs to prepare your local i7-14700 / RTX 5060 Ti node for optimization passes.</p>`
         });
 
         return res.status(201).json({ success: true, message: 'Ingress verified and asset dispatched.' });
