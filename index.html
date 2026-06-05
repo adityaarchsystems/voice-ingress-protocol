@@ -949,13 +949,13 @@
         </div>
 
         <div class="sys-field-container">
-          <label for="input-target-name" class="sys-field-label">OPERATOR NAME</label>
-          <input type="text" id="input-target-name" class="sys-input-field" placeholder="Enter operator full name" autocomplete="off">
+          <label for="operator-name-input" class="sys-field-label">OPERATOR NAME</label>
+          <input type="text" id="operator-name-input" class="sys-input-field" placeholder="Enter operator full name" autocomplete="off">
         </div>
 
         <div class="sys-field-container">
-          <label for="input-target-email" class="sys-field-label">SECURE PORTAL EMAIL</label>
-          <input type="email" id="input-target-email" class="sys-input-field" placeholder="Enter delivery network address" autocomplete="off">
+          <label for="secure-email-input" class="sys-field-label">SECURE PORTAL EMAIL</label>
+          <input type="email" id="secure-email-input" class="sys-input-field" placeholder="Enter delivery network address" autocomplete="off">
         </div>
       </aside>
 
@@ -1211,8 +1211,8 @@
     };
 
     // Element bindings
-    const elName = document.getElementById("input-target-name");
-    const elEmail = document.getElementById("input-target-email");
+    const elName = document.getElementById("operator-name-input");
+    const elEmail = document.getElementById("secure-email-input");
     const elTriggerCheckout = document.getElementById("trigger-checkout");
     const elScriptEnglish = document.getElementById("script-english");
     const elScriptHinglish = document.getElementById("script-hinglish");
@@ -1298,22 +1298,52 @@
 
     // Checkout Handlers
     elTriggerCheckout.addEventListener("click", () => {
-      if (!state.email) {
+      const operatorName = document.querySelector('#operator-name-input').value.trim();
+      const secureEmail = document.querySelector('#secure-email-input').value.trim();
+
+      if (!secureEmail) {
         showToast("Error: Verification deficit. Delivery network email required.");
         return;
       }
-      if (!state.name || !state.city) {
-        showToast("Error: Target name or location details required.");
+      if (!operatorName) {
+        showToast("Error: Target name required.");
         return;
       }
 
-      // Open mock Checkout modal
-      elCheckoutKey.textContent = window.CalyxConfig.razorpayKey;
-      elCheckoutOperator.textContent = state.name;
-      elCheckoutEmail.textContent = state.email;
-      elCheckoutOverlay.style.display = "flex";
-      
-      addTerminalLog("Initialized Razorpay checkout dialogue modal pass.", "INGRESS_GATE");
+      // Show loading status on primary button
+      const originalText = elTriggerCheckout.textContent;
+      elTriggerCheckout.textContent = "[ INITIALIZING INGRESS... ]";
+      elTriggerCheckout.disabled = true;
+
+      fetch('/api/ingress', {
+        method: 'POST',
+        body: JSON.stringify({ name: operatorName, email: secureEmail })
+      })
+      .then(response => {
+        if (!response.ok) {
+          return response.json().then(err => { throw new Error(err.error || 'Server error'); });
+        }
+        return response.json();
+      })
+      .then(data => {
+        addTerminalLog("Ingress API validated successfully.", "INGRESS_GATE");
+        
+        // Open mock Checkout modal
+        elCheckoutKey.textContent = window.CalyxConfig.razorpayKey;
+        elCheckoutOperator.textContent = operatorName;
+        elCheckoutEmail.textContent = secureEmail;
+        elCheckoutOverlay.style.display = "flex";
+        
+        addTerminalLog("Initialized Razorpay checkout dialogue modal pass.", "INGRESS_GATE");
+      })
+      .catch(err => {
+        showToast("Ingress failed: " + err.message);
+        addTerminalLog("Ingress transit failure: " + err.message, "ERROR");
+      })
+      .finally(() => {
+        elTriggerCheckout.textContent = originalText;
+        elTriggerCheckout.disabled = false;
+      });
     });
 
     elTriggerPaySuccess.addEventListener("click", () => {
