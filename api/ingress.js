@@ -26,11 +26,6 @@ export default async function handler(req, res) {
         if (dbError) throw dbError;
 
         // 2. Automated Asset Delivery Dispatch via Resend API
-        const supabaseProjectId = process.env.SUPABASE_URL.startsWith('http')
-            ? process.env.SUPABASE_URL.split('.')[0].replace('https://', '').replace('http://', '')
-            : process.env.SUPABASE_URL;
-        const downloadUrl = `https://${supabaseProjectId}.supabase.co/storage/v1/object/public/voice-assets/AI_Clone_Training_Script_Bilingiual.html?download=true`;
-
         await resend.emails.send({
             from: 'Aditya Sharma // Calyx Engine <onboarding@resend.dev>',
             to: email,
@@ -40,9 +35,8 @@ export default async function handler(req, res) {
                     <p>Your open-access directory token has been validated successfully.</p>
                     <p style="margin-top: 24px; margin-bottom: 24px;">
                        <strong>
-                          <a href="${downloadUrl}" 
-                             download="AI_Clone_Training_Script_Bilingiual.html"
-                             style="padding: 12px 24px; background-color: #5341cd; color: #ffffff; text-decoration: none; border: 2px solid #1b1b1b; display: inline-block; font-weight: bold;">
+                          <a href="https://voice-ingress-protocol.vercel.app/api/download" 
+                             style="padding: 12px 24px; background-color: #5341cd; color: #ffffff; text-decoration: none; border: 2px solid #1b1b1b; display: inline-block; font-weight: bold; font-family: monospace;">
                              CLICK HERE TO INSTANTLY DOWNLOAD TRAINING SCRIPT ASSET
                           </a>
                        </strong>
