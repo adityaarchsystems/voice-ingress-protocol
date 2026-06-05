@@ -29,7 +29,7 @@ export default async function handler(req, res) {
         const supabaseProjectId = process.env.SUPABASE_URL.startsWith('http')
             ? process.env.SUPABASE_URL.split('.')[0].replace('https://', '').replace('http://', '')
             : process.env.SUPABASE_URL;
-        const downloadUrl = `https://${supabaseProjectId}.supabase.co/storage/v1/object/public/voice-assets/AI_Clone_Training_Script.pdf`;
+        const downloadUrl = `https://${supabaseProjectId}.supabase.co/storage/v1/object/public/voice-assets/AI_Clone_Training_Script_Bilingiual.html?download=true`;
 
         await resend.emails.send({
             from: 'Aditya Sharma // Calyx Engine <onboarding@resend.dev>',
@@ -41,9 +41,9 @@ export default async function handler(req, res) {
                     <p style="margin-top: 24px; margin-bottom: 24px;">
                        <strong>
                           <a href="${downloadUrl}" 
-                             download 
-                             style="padding: 12px 24px; background-color: #5341cd; color: #ffffff; text-decoration: none; border: 2px solid #1b1b1b; display: inline-block;">
-                             CLICK HERE TO INSTANTLY DOWNLOAD TRAINING PDF ASSET
+                             download="AI_Clone_Training_Script_Bilingiual.html"
+                             style="padding: 12px 24px; background-color: #5341cd; color: #ffffff; text-decoration: none; border: 2px solid #1b1b1b; display: inline-block; font-weight: bold;">
+                             CLICK HERE TO INSTANTLY DOWNLOAD TRAINING SCRIPT ASSET
                           </a>
                        </strong>
                     </p>
